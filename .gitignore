@@ -21,3 +21,4 @@
 # kitex
 thrift_streaming/output
 conf
+.DS_Store
