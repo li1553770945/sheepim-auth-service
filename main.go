@@ -22,6 +22,7 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	"net"
 	"sheepim-auth-service/kitex_gen/auth/authservice"
 )
 
@@ -29,9 +30,10 @@ func main() {
 	serviceName := "sheepim-user-service"
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(serviceName),
-		provider.WithExportEndpoint("localhost:4317"),
+		provider.WithExportEndpoint(App.Config.OpenTelemetryConfig.Endpoint),
 		provider.WithInsecure(),
 	)
+
 	defer func(p provider.OtelProvider, ctx context.Context) {
 		err := p.Shutdown(ctx)
 		if err != nil {
@@ -39,11 +41,17 @@ func main() {
 		}
 	}(p, context.Background())
 
+	addr, err := net.ResolveTCPAddr("tcp", App.Config.ServerConfig.ListenAddress)
+	if err != nil {
+		panic("设置监听地址出错")
+	}
 	svr := authservice.NewServer(
 		new(AuthServiceImpl),
 		server.WithSuite(tracing.NewServerSuite()),
 		// Please keep the same as provider.WithServiceName
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
+		server.WithRegistry(r),
+		server.WithServiceAddr(addr),
 	)
 	if err := svr.Run(); err != nil {
 		klog.Fatalf("server stopped with error:", err)

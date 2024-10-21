@@ -7,10 +7,10 @@ import (
 
 type Container struct {
 	Config      *config.Config
-	UserService user.IUserService
+	UserService user.IAuthService
 }
 
-func NewContainer(config *config.Config, userService user.IUserService,
+func NewContainer(config *config.Config, userService user.IAuthService,
 ) *Container {
 	return &Container{
 		Config:      config,

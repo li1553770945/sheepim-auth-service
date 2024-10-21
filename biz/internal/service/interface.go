@@ -6,6 +6,7 @@ import (
 )
 
 type AuthService struct {
+	Repo *Re
 }
 
 type IAuthService interface {
