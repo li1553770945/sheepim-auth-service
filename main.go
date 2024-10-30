@@ -22,11 +22,24 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	etcd "github.com/kitex-contrib/registry-etcd"
+	"log"
 	"net"
+	"os"
+	"sheepim-auth-service/biz/infra/container"
 	"sheepim-auth-service/kitex_gen/auth/authservice"
 )
 
+var App *container.Container
+
 func main() {
+
+	env := os.Getenv("ENV")
+	if env == "" {
+		env = "development"
+	}
+	App = container.GetContainer(env)
+
 	serviceName := "sheepim-user-service"
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(serviceName),
@@ -45,6 +58,12 @@ func main() {
 	if err != nil {
 		panic("设置监听地址出错")
 	}
+
+	r, err := etcd.NewEtcdRegistry([]string{App.Config.EtcdConfig.Endpoint}) // r should not be reused.
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	svr := authservice.NewServer(
 		new(AuthServiceImpl),
 		server.WithSuite(tracing.NewServerSuite()),
