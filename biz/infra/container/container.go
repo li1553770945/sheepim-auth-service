@@ -1,16 +1,32 @@
 package container
 
 import (
-	"sheepim-auth-service/biz/infra/config"
-	user "sheepim-auth-service/biz/internal/service"
+	"sheepim-user-service/biz/infra/config"
+	"sync"
 )
 
 type Container struct {
 	Config      *config.Config
-	UserService user.IAuthService
+	UserService user.IUserService
 }
 
-func NewContainer(config *config.Config, userService user.IAuthService,
+var APP *Container
+var once sync.Once
+
+func GetGlobalContainer() *Container {
+	if APP == nil {
+		panic("APP在使用前未初始化")
+	}
+	return APP
+}
+
+func InitGlobalContainer(env string) {
+	once.Do(func() {
+		APP = GetContainer(env)
+	})
+}
+
+func NewContainer(config *config.Config, userService user.IUserService,
 ) *Container {
 	return &Container{
 		Config:      config,

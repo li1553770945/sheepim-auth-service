@@ -8,10 +8,9 @@ import (
 	"sheepim-user-service/biz/infra/config"
 	"sheepim-user-service/biz/infra/database"
 	"sheepim-user-service/biz/internal/repo"
-	"sheepim-user-service/biz/internal/service"
 )
 
-func GetContainer(path string) *Container {
+func GetContainer(env string) *Container {
 	panic(wire.Build(
 
 		//infra
