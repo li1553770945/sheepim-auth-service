@@ -31,9 +31,20 @@ struct GenerateActiveCodeResp {
     2: optional string token
 }
 
+struct RegisterReq{
+    1: required string username
+    2: required string nickname
+    3: required string password
+}
+
+struct RegisterResp{
+    1: required base.BaseResp baseResp
+}
+
 service AuthService {
     LoginResp Login(LoginReq req)
     LogoutResp Logout(LogoutReq req)
     GenerateActiveCodeResp GenerateActiveCode(GenerateActiveCodeReq req)
+    RegisterResp Register(RegisterReq req)
 
 }

@@ -30,15 +30,14 @@ import (
 	"sheepim-auth-service/kitex_gen/auth/authservice"
 )
 
-var App *container.Container
-
 func main() {
 
 	env := os.Getenv("ENV")
 	if env == "" {
 		env = "development"
 	}
-	App = container.GetContainer(env)
+
+	App := container.GetContainer(env)
 
 	serviceName := "sheepim-user-service"
 	p := provider.NewOpenTelemetryProvider(

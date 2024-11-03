@@ -1,13 +1,14 @@
 package container
 
 import (
-	"sheepim-user-service/biz/infra/config"
+	"sheepim-auth-service/biz/infra/config"
+	"sheepim-auth-service/biz/internal/service"
 	"sync"
 )
 
 type Container struct {
 	Config      *config.Config
-	UserService user.IUserService
+	AuthService service.IAuthService
 }
 
 var APP *Container
@@ -26,11 +27,10 @@ func InitGlobalContainer(env string) {
 	})
 }
 
-func NewContainer(config *config.Config, userService user.IUserService,
-) *Container {
+func NewContainer(config *config.Config, authService service.IAuthService) *Container {
 	return &Container{
 		Config:      config,
-		UserService: userService,
+		AuthService: authService,
 	}
 
 }

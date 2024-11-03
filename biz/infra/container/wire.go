@@ -1,13 +1,9 @@
-//go:build wireinject
-// +build wireinject
-
 package container
 
 import (
 	"github.com/google/wire"
-	"sheepim-user-service/biz/infra/config"
-	"sheepim-user-service/biz/infra/database"
-	"sheepim-user-service/biz/internal/repo"
+	"sheepim-auth-service/biz/infra/config"
+	"sheepim-auth-service/biz/internal/service"
 )
 
 func GetContainer(env string) *Container {
@@ -17,11 +13,9 @@ func GetContainer(env string) *Container {
 		config.InitConfig,
 
 		//repo
-		repo.NewRepository,
-		database.NewDatabase,
 
 		//service
-		user.NewUserService,
+		service.NewAuthService,
 
 		NewContainer,
 	))

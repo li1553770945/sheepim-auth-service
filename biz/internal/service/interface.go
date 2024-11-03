@@ -2,22 +2,19 @@ package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
+	"sheepim-auth-service/kitex_gen/auth"
 )
 
 type AuthService struct {
-	Repo *Re
 }
 
 type IAuthService interface {
-	Login(ctx context.Context, c *app.RequestContext)
-	Logout(ctx context.Context, c *app.RequestContext)
-	GenerateActivateCode(ctx context.Context, c *app.RequestContext)
-	Register(ctx context.Context, c *app.RequestContext)
+	Login(ctx context.Context, req *auth.LoginReq) (resp *auth.LoginResp, err error)
+	Logout(ctx context.Context, req *auth.LogoutReq) (resp *auth.LogoutResp, err error)
+	GenerateActivateCode(ctx context.Context, req *auth.GenerateActiveCodeReq) (resp *auth.GenerateActiveCodeResp, err error)
+	Register(ctx context.Context, req *auth.RegisterReq) (resp *auth.RegisterResp, err error)
 }
 
-func NewAuthService(repo repo.IRepository) IAuthService {
-	return &AuthService{
-		Repo: repo,
-	}
+func NewAuthService() IAuthService {
+	return &AuthService{}
 }
