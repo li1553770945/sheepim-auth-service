@@ -8,6 +8,7 @@ import (
 
 type Container struct {
 	Config      *config.Config
+	SecretKeys  *config.SecretKeys
 	AuthService service.IAuthService
 }
 
@@ -27,9 +28,10 @@ func InitGlobalContainer(env string) {
 	})
 }
 
-func NewContainer(config *config.Config, authService service.IAuthService) *Container {
+func NewContainer(config *config.Config, secretKeys *config.SecretKeys, authService service.IAuthService) *Container {
 	return &Container{
 		Config:      config,
+		SecretKeys:  secretKeys,
 		AuthService: authService,
 	}
 

@@ -11,7 +11,7 @@ import (
 func NewUserClient(config *config.Config) userservice.Client {
 	r, err := etcd.NewEtcdResolver([]string{config.EtcdConfig.Endpoint})
 	userClient, err := userservice.NewClient(
-		"sheepim-user-service",
+		config.RpcConfig.UserServiceName,
 		client.WithResolver(r),
 	)
 	if err != nil {

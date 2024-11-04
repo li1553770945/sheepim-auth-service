@@ -8,14 +8,17 @@ package container
 
 import (
 	"sheepim-auth-service/biz/infra/config"
+	"sheepim-auth-service/biz/infra/rpc"
 	"sheepim-auth-service/biz/internal/service"
 )
 
 // Injectors from wire.go:
 
 func GetContainer(env string) *Container {
-	configConfig := config.InitConfig(env)
-	iAuthService := service.NewAuthService()
-	container := NewContainer(configConfig, iAuthService)
+	configConfig := config.GetConfig(env)
+	secretKeys := config.GetSecretKey()
+	client := rpc.NewUserClient(configConfig)
+	iAuthService := service.NewAuthService(client, secretKeys)
+	container := NewContainer(configConfig, secretKeys, iAuthService)
 	return container
 }

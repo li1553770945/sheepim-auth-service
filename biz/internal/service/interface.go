@@ -2,10 +2,14 @@ package service
 
 import (
 	"context"
+	"sheepim-auth-service/biz/infra/config"
 	"sheepim-auth-service/kitex_gen/auth"
+	"sheepim-user-service/kitex_gen/user/userservice"
 )
 
 type AuthService struct {
+	UserRpcClient userservice.Client
+	SecretKeys    *config.SecretKeys
 }
 
 type IAuthService interface {
@@ -15,6 +19,9 @@ type IAuthService interface {
 	Register(ctx context.Context, req *auth.RegisterReq) (resp *auth.RegisterResp, err error)
 }
 
-func NewAuthService() IAuthService {
-	return &AuthService{}
+func NewAuthService(userRpcClient userservice.Client, secretKeys *config.SecretKeys) IAuthService {
+	return &AuthService{
+		UserRpcClient: userRpcClient,
+		SecretKeys:    secretKeys,
+	}
 }
