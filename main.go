@@ -39,7 +39,7 @@ func main() {
 
 	App := container.GetContainer(env)
 
-	serviceName := "sheepim-user-service"
+	serviceName := App.Config.ServerConfig.ServiceName
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(serviceName),
 		provider.WithExportEndpoint(App.Config.OpenTelemetryConfig.Endpoint),

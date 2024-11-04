@@ -29,6 +29,10 @@ type DatabaseConfig struct {
 	Port     int32  `yaml:"port"`
 }
 
+type RpcConfig struct {
+	UserServiceName string `yaml:"user-service-name"`
+}
+
 type Config struct {
 	Env                 string
 	ServerConfig        ServerConfig        `yaml:"server"`
