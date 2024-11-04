@@ -10,11 +10,10 @@ import (
 	"sheepim-auth-service/biz/internal/service"
 )
 
-func GetContainer(env string) *Container {
+func GetContainer(cfg *config.Config) *Container {
 	panic(wire.Build(
 
 		//infra
-		config.GetConfig,
 		config.GetSecretKey,
 
 		//rpc

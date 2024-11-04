@@ -2,6 +2,8 @@ package rpc
 
 import (
 	"github.com/cloudwego/kitex/client"
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"log"
 	"sheepim-auth-service/biz/infra/config"
@@ -13,6 +15,8 @@ func NewUserClient(config *config.Config) userservice.Client {
 	userClient, err := userservice.NewClient(
 		config.RpcConfig.UserServiceName,
 		client.WithResolver(r),
+		client.WithSuite(tracing.NewClientSuite()),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.ServerConfig.ServiceName}),
 	)
 	if err != nil {
 		log.Fatal(err)

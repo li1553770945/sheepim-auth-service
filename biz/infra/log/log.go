@@ -21,6 +21,7 @@ func InitLog() {
 	logFile, err := os.OpenFile(logFileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
 		klog.Fatalf("failed to open log file: %v", err)
+		panic("无法打开日志文件")
 	}
 	multiWriter := io.MultiWriter(logFile, os.Stdout)
 	klog.SetOutput(multiWriter)

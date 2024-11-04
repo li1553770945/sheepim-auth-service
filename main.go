@@ -10,8 +10,10 @@ import (
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"net"
 	"os"
+	configInfra "sheepim-auth-service/biz/infra/config"
 	"sheepim-auth-service/biz/infra/container"
 	"sheepim-auth-service/biz/infra/log"
+	"sheepim-auth-service/biz/infra/trace"
 	"sheepim-auth-service/kitex_gen/auth/authservice"
 )
 
@@ -21,16 +23,12 @@ func main() {
 	if env == "" {
 		env = "development"
 	}
-	container.InitGlobalContainer(env)
+	config := configInfra.GetConfig(env)
 	log.InitLog()
-	App := container.GetGlobalContainer()
+	p := trace.InitTrace(config)
 
-	serviceName := App.Config.ServerConfig.ServiceName
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(serviceName),
-		provider.WithExportEndpoint(App.Config.OpenTelemetryConfig.Endpoint),
-		provider.WithInsecure(),
-	)
+	container.InitGlobalContainer(config)
+	App := container.GetGlobalContainer()
 
 	defer func(p provider.OtelProvider, ctx context.Context) {
 		err := p.Shutdown(ctx)
@@ -48,7 +46,7 @@ func main() {
 	if err != nil {
 		klog.Fatal(err)
 	}
-
+	serviceName := App.Config.ServerConfig.ServiceName
 	svr := authservice.NewServer(
 		new(AuthServiceImpl),
 		server.WithSuite(tracing.NewServerSuite()),

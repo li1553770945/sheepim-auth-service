@@ -19,7 +19,7 @@ func (s *AuthService) Login(ctx context.Context, req *auth.LoginReq) (*auth.Logi
 		Password: req.Password,
 	})
 	if err != nil {
-		klog.CtxErrorf(ctx, "用户 %s 用户名密码核验错误: %s", req.Username, err.Error())
+		klog.CtxErrorf(ctx, " %s 调用user用户名密码核验服务失败： 错误: %v", req.Username, err)
 		return nil, err
 	}
 	resp := &auth.LoginResp{
@@ -44,7 +44,6 @@ func (s *AuthService) Login(ctx context.Context, req *auth.LoginReq) (*auth.Logi
 		klog.CtxErrorf(ctx, "jwt 加密失败："+err.Error())
 		return nil, err
 	}
-	klog.CtxInfof(ctx, token)
 	resp.Token = &token
 	klog.CtxInfof(ctx, "用户 %s 登录成功", req.Username)
 	return resp, nil
