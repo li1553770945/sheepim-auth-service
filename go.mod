@@ -1,4 +1,4 @@
-module sheepim-auth-service
+module github.com/li1553770945/sheepim-auth-service
 
 go 1.23.2
 
