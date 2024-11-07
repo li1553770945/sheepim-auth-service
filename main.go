@@ -8,13 +8,13 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
+	configInfra "github.com/li1553770945/sheepim-auth-service/biz/infra/config"
+	"github.com/li1553770945/sheepim-auth-service/biz/infra/container"
+	"github.com/li1553770945/sheepim-auth-service/biz/infra/log"
+	"github.com/li1553770945/sheepim-auth-service/biz/infra/trace"
+	"github.com/li1553770945/sheepim-auth-service/kitex_gen/auth/authservice"
 	"net"
 	"os"
-	configInfra "sheepim-auth-service/biz/infra/config"
-	"sheepim-auth-service/biz/infra/container"
-	"sheepim-auth-service/biz/infra/log"
-	"sheepim-auth-service/biz/infra/trace"
-	"sheepim-auth-service/kitex_gen/auth/authservice"
 )
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 		panic("设置监听地址出错")
 	}
 
-	r, err := etcd.NewEtcdRegistry([]string{App.Config.EtcdConfig.Endpoint}) // r should not be reused.
+	r, err := etcd.NewEtcdRegistry(App.Config.EtcdConfig.Endpoint) // r should not be reused.
 	if err != nil {
 		klog.Fatal(err)
 	}

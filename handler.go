@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"sheepim-auth-service/biz/infra/container"
-	auth "sheepim-auth-service/kitex_gen/auth"
+	"github.com/li1553770945/sheepim-auth-service/biz/infra/container"
+	auth "github.com/li1553770945/sheepim-auth-service/kitex_gen/auth"
 )
 
 // AuthServiceImpl implements the last service interface defined in the IDL.

@@ -2,10 +2,10 @@ package config
 
 import (
 	"fmt"
+	"github.com/li1553770945/sheepim-auth-service/biz/constant"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
-	"sheepim-auth-service/biz/constant"
 )
 
 type ServerConfig struct {
@@ -18,7 +18,7 @@ type OpenTelemetryConfig struct {
 }
 
 type EtcdConfig struct {
-	Endpoint string `yaml:"endpoint"`
+	Endpoint []string `yaml:"endpoint"`
 }
 
 type DatabaseConfig struct {

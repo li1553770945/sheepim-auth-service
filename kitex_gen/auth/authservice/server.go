@@ -3,7 +3,7 @@ package authservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	auth "sheepim-auth-service/kitex_gen/auth"
+	auth "github.com/li1553770945/sheepim-auth-service/kitex_gen/auth"
 )
 
 // NewServer creates a server.Server with the given handler and options.

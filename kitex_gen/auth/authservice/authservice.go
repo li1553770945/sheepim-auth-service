@@ -6,7 +6,7 @@ import (
 	"context"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
-	auth "sheepim-auth-service/kitex_gen/auth"
+	auth "github.com/li1553770945/sheepim-auth-service/kitex_gen/auth"
 )
 
 func serviceInfo() *kitex.ServiceInfo {
@@ -26,7 +26,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	}
 	extra := map[string]interface{}{
 		"PackageName":     "auth",
-		"ServiceFilePath": `idl\auth.thrift`,
+		"ServiceFilePath": `idl/auth.thrift`,
 	}
 	svcInfo := &kitex.ServiceInfo{
 		ServiceName:     serviceName,

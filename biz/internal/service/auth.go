@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/golang-jwt/jwt/v5"
-	"sheepim-auth-service/biz/constant"
-	"sheepim-auth-service/kitex_gen/auth"
-	"sheepim-auth-service/kitex_gen/base"
-	"sheepim-user-service/kitex_gen/user"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/li1553770945/sheepim-auth-service/biz/constant"
+	"github.com/li1553770945/sheepim-auth-service/kitex_gen/auth"
+	"github.com/li1553770945/sheepim-auth-service/kitex_gen/base"
+	"github.com/li1553770945/sheepim-user-service/kitex_gen/user"
 	"time"
 )
 

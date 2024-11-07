@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	"sheepim-auth-service/biz/infra/config"
-	"sheepim-auth-service/kitex_gen/auth"
-	"sheepim-user-service/kitex_gen/user/userservice"
+	"github.com/li1553770945/sheepim-auth-service/biz/infra/config"
+	"github.com/li1553770945/sheepim-auth-service/kitex_gen/auth"
+	"github.com/li1553770945/sheepim-user-service/kitex_gen/user/userservice"
 )
 
 type AuthService struct {

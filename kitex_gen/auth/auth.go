@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
-	"sheepim-auth-service/kitex_gen/base"
+	"github.com/li1553770945/sheepim-auth-service/kitex_gen/base"
 	"strings"
 )
 

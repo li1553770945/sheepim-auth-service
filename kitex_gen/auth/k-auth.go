@@ -12,7 +12,7 @@ import (
 
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
 
-	"sheepim-auth-service/kitex_gen/base"
+	"github.com/li1553770945/sheepim-auth-service/kitex_gen/base"
 )
 
 // unused protection

@@ -2,5 +2,7 @@
 
 
 ```bash
-kitex -module "sheepim-auth-service" -service sheepim-auth-service idl/auth.thrift
+kitex -module github.com/li1553770945/sheepim-auth-service -service sheepim-auth-service idl/auth.thrift
+cd biz/infra/container
+wire
 ```
