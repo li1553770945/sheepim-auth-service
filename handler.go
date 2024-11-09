@@ -40,5 +40,7 @@ func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterReq) (
 // GetUserId implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetUserId(ctx context.Context, req *auth.GetUserIdReq) (resp *auth.GetUserIdResp, err error) {
 	// TODO: Your code here...
+	App := container.GetGlobalContainer()
+	resp, err = App.AuthService.GetUserId(ctx, req)
 	return
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/li1553770945/sheepim-auth-service/biz/constant"
@@ -64,7 +65,7 @@ func (s *AuthServiceImpl) GetUserId(ctx context.Context, req *auth.GetUserIdReq)
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		// 确保使用的签名方法是 HS256
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, jwt.NewValidationError("不支持的签名", jwt.ValidationErrorSignatureInvalid)
+			return nil, jwt.NewValidationError("不支持的jwt签名", jwt.ValidationErrorSignatureInvalid)
 		}
 		return []byte(s.SecretKeys.JWTKey), nil
 	})
@@ -72,29 +73,30 @@ func (s *AuthServiceImpl) GetUserId(ctx context.Context, req *auth.GetUserIdReq)
 	if err != nil {
 		klog.CtxErrorf(ctx, "令牌解析失败: %v", err)
 		resp.BaseResp.Code = constant.Unauthorized
-		resp.BaseResp.Message = "无效的令牌"
+		resp.BaseResp.Message = fmt.Sprintf("jwt解析失败: %v", err)
 		return resp, nil
 	}
 
 	// 检查令牌是否有效并提取声明
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		// 提取 userId
-		if userId, ok := claims["userId"].(float64); ok {
-			resp.UserId = int32(userId)
-			klog.CtxInfof(ctx, "令牌解析成功，用户ID: %d", resp.UserId)
-			return resp, nil
-		}
+	claims, ok := token.Claims.(jwt.MapClaims)
+
+	if !ok || !token.Valid {
 		// 如果无法提取 userId
-		klog.CtxErrorf(ctx, "令牌解析失败：无法提取 userId")
+		klog.CtxErrorf(ctx, "令牌解析失败：token无效")
 		resp.BaseResp.Code = constant.Unauthorized
-		resp.BaseResp.Message = "无效的令牌"
-		return resp, nil
-	} else {
-		klog.CtxErrorf(ctx, "令牌无效")
-		resp.BaseResp.Code = constant.Unauthorized
-		resp.BaseResp.Message = "无效的令牌"
+		resp.BaseResp.Message = "令牌解析失败：token无效"
 		return resp, nil
 	}
+	userId, ok := claims["userId"].(float64)
+	if !ok {
+		klog.CtxErrorf(ctx, "令牌解析失败：无法提取 userId")
+		resp.BaseResp.Code = constant.Unauthorized
+		resp.BaseResp.Message = "令牌解析失败：无法提取 userId"
+		return resp, nil
+	}
+	resp.UserId = int64(userId)
+	klog.CtxInfof(ctx, "令牌解析成功，用户ID: %d", resp.UserId)
+	return resp, nil
 
 }
 func (s *AuthServiceImpl) Logout(ctx context.Context, req *auth.LogoutReq) (resp *auth.LogoutResp, err error) {

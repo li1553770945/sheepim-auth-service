@@ -46,7 +46,7 @@ struct GetUserIdReq{
 }
 struct GetUserIdResp{
     1: required base.BaseResp baseResp
-    2: required i32 userId
+    2: required i64 userId
 }
 service AuthService {
     LoginResp Login(LoginReq req)

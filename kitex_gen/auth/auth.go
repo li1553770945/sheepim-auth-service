@@ -1940,7 +1940,7 @@ func (p *GetUserIdReq) Field1DeepEqual(src string) bool {
 
 type GetUserIdResp struct {
 	BaseResp *base.BaseResp `thrift:"baseResp,1,required" frugal:"1,required,base.BaseResp" json:"baseResp"`
-	UserId   int32          `thrift:"userId,2,required" frugal:"2,required,i32" json:"userId"`
+	UserId   int64          `thrift:"userId,2,required" frugal:"2,required,i64" json:"userId"`
 }
 
 func NewGetUserIdResp() *GetUserIdResp {
@@ -1960,13 +1960,13 @@ func (p *GetUserIdResp) GetBaseResp() (v *base.BaseResp) {
 	return p.BaseResp
 }
 
-func (p *GetUserIdResp) GetUserId() (v int32) {
+func (p *GetUserIdResp) GetUserId() (v int64) {
 	return p.UserId
 }
 func (p *GetUserIdResp) SetBaseResp(val *base.BaseResp) {
 	p.BaseResp = val
 }
-func (p *GetUserIdResp) SetUserId(val int32) {
+func (p *GetUserIdResp) SetUserId(val int64) {
 	p.UserId = val
 }
 
@@ -2012,7 +2012,7 @@ func (p *GetUserIdResp) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I32 {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2072,7 +2072,7 @@ func (p *GetUserIdResp) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *GetUserIdResp) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserId = v
@@ -2131,10 +2131,10 @@ WriteFieldEndError:
 }
 
 func (p *GetUserIdResp) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("userId", thrift.I32, 2); err != nil {
+	if err = oprot.WriteFieldBegin("userId", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI32(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2176,7 +2176,7 @@ func (p *GetUserIdResp) Field1DeepEqual(src *base.BaseResp) bool {
 	}
 	return true
 }
-func (p *GetUserIdResp) Field2DeepEqual(src int32) bool {
+func (p *GetUserIdResp) Field2DeepEqual(src int64) bool {
 
 	if p.UserId != src {
 		return false
