@@ -1,6 +1,6 @@
 module github.com/li1553770945/sheepim-auth-service
 
-go 1.23.2
+go 1.23.3
 
 require (
 	github.com/apache/thrift v0.21.0
