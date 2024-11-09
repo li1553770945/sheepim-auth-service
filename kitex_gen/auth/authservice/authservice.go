@@ -23,6 +23,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"Logout":             kitex.NewMethodInfo(logoutHandler, newAuthServiceLogoutArgs, newAuthServiceLogoutResult, false),
 		"GenerateActiveCode": kitex.NewMethodInfo(generateActiveCodeHandler, newAuthServiceGenerateActiveCodeArgs, newAuthServiceGenerateActiveCodeResult, false),
 		"Register":           kitex.NewMethodInfo(registerHandler, newAuthServiceRegisterArgs, newAuthServiceRegisterResult, false),
+		"GetUserId":          kitex.NewMethodInfo(getUserIdHandler, newAuthServiceGetUserIdArgs, newAuthServiceGetUserIdResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName":     "auth",
@@ -111,6 +112,24 @@ func newAuthServiceRegisterResult() interface{} {
 	return auth.NewAuthServiceRegisterResult()
 }
 
+func getUserIdHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceGetUserIdArgs)
+	realResult := result.(*auth.AuthServiceGetUserIdResult)
+	success, err := handler.(auth.AuthService).GetUserId(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceGetUserIdArgs() interface{} {
+	return auth.NewAuthServiceGetUserIdArgs()
+}
+
+func newAuthServiceGetUserIdResult() interface{} {
+	return auth.NewAuthServiceGetUserIdResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -156,6 +175,16 @@ func (p *kClient) Register(ctx context.Context, req *auth.RegisterReq) (r *auth.
 	_args.Req = req
 	var _result auth.AuthServiceRegisterResult
 	if err = p.c.Call(ctx, "Register", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetUserId(ctx context.Context, req *auth.GetUserIdReq) (r *auth.GetUserIdResp, err error) {
+	var _args auth.AuthServiceGetUserIdArgs
+	_args.Req = req
+	var _result auth.AuthServiceGetUserIdResult
+	if err = p.c.Call(ctx, "GetUserId", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

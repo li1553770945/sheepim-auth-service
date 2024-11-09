@@ -15,6 +15,7 @@ type Client interface {
 	Logout(ctx context.Context, req *auth.LogoutReq, callOptions ...callopt.Option) (r *auth.LogoutResp, err error)
 	GenerateActiveCode(ctx context.Context, req *auth.GenerateActiveCodeReq, callOptions ...callopt.Option) (r *auth.GenerateActiveCodeResp, err error)
 	Register(ctx context.Context, req *auth.RegisterReq, callOptions ...callopt.Option) (r *auth.RegisterResp, err error)
+	GetUserId(ctx context.Context, req *auth.GetUserIdReq, callOptions ...callopt.Option) (r *auth.GetUserIdResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -64,4 +65,9 @@ func (p *kAuthServiceClient) GenerateActiveCode(ctx context.Context, req *auth.G
 func (p *kAuthServiceClient) Register(ctx context.Context, req *auth.RegisterReq, callOptions ...callopt.Option) (r *auth.RegisterResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Register(ctx, req)
+}
+
+func (p *kAuthServiceClient) GetUserId(ctx context.Context, req *auth.GetUserIdReq, callOptions ...callopt.Option) (r *auth.GetUserIdResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUserId(ctx, req)
 }
