@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/li1553770945/sheepim-auth-service/biz/constant"
 	"github.com/li1553770945/sheepim-auth-service/kitex_gen/auth"
 	"github.com/li1553770945/sheepim-auth-service/kitex_gen/base"
@@ -65,7 +66,7 @@ func (s *AuthServiceImpl) GetUserId(ctx context.Context, req *auth.GetUserIdReq)
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		// 确保使用的签名方法是 HS256
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, jwt.NewValidationError("不支持的jwt签名", jwt.ValidationErrorSignatureInvalid)
+			return nil, errors.New("不支持的签名方法")
 		}
 		return []byte(s.SecretKeys.JWTKey), nil
 	})
