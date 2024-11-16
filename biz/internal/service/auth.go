@@ -140,7 +140,7 @@ func (s *AuthServiceImpl) GetClientId(ctx context.Context, req *auth.GetClientId
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		// 确保使用的签名方法是 HS256
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, jwt.NewValidationError("不支持的jwt签名", jwt.ValidationErrorSignatureInvalid)
+			return nil, errors.New("不支持的jwt签名")
 		}
 		return []byte(s.SecretKeys.JWTKey), nil
 	})
