@@ -18,6 +18,8 @@ type IAuthService interface {
 	GenerateActivateCode(ctx context.Context, req *auth.GenerateActiveCodeReq) (resp *auth.GenerateActiveCodeResp, err error)
 	Register(ctx context.Context, req *auth.RegisterReq) (resp *auth.RegisterResp, err error)
 	GetUserId(ctx context.Context, req *auth.GetUserIdReq) (resp *auth.GetUserIdResp, err error)
+	GetClientToken(ctx context.Context, req *auth.GetClientTokenReq) (resp *auth.GetClientTokenResp, err error)
+	GetClientId(ctx context.Context, req *auth.GetClientIdReq) (resp *auth.GetClientIdResp, err error)
 }
 
 func NewAuthService(userRpcClient userservice.Client, secretKeys *config.SecretKeys) IAuthService {

@@ -48,11 +48,30 @@ struct GetUserIdResp{
     1: required base.BaseResp baseResp
     2: required i64 userId
 }
+
+struct GetClientTokenReq{
+    1: required string clientId
+}
+struct GetClientTokenResp{
+    1: required base.BaseResp baseResp
+    2: optional string token
+}
+
+struct GetClientIdReq{
+    1: required string token
+}
+struct GetClientIdResp{
+    1: required base.BaseResp baseResp
+    2: optional string clientId
+}
+
 service AuthService {
     LoginResp Login(LoginReq req)
     LogoutResp Logout(LogoutReq req)
     GenerateActiveCodeResp GenerateActiveCode(GenerateActiveCodeReq req)
     RegisterResp Register(RegisterReq req)
     GetUserIdResp GetUserId(GetUserIdReq req)
+    GetClientTokenResp GetClientToken(GetClientTokenReq req)
+    GetClientIdResp GetClientId(GetClientIdReq req)
 
 }

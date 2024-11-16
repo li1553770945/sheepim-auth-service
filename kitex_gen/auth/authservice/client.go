@@ -16,6 +16,8 @@ type Client interface {
 	GenerateActiveCode(ctx context.Context, req *auth.GenerateActiveCodeReq, callOptions ...callopt.Option) (r *auth.GenerateActiveCodeResp, err error)
 	Register(ctx context.Context, req *auth.RegisterReq, callOptions ...callopt.Option) (r *auth.RegisterResp, err error)
 	GetUserId(ctx context.Context, req *auth.GetUserIdReq, callOptions ...callopt.Option) (r *auth.GetUserIdResp, err error)
+	GetClientToken(ctx context.Context, req *auth.GetClientTokenReq, callOptions ...callopt.Option) (r *auth.GetClientTokenResp, err error)
+	GetClientId(ctx context.Context, req *auth.GetClientIdReq, callOptions ...callopt.Option) (r *auth.GetClientIdResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -70,4 +72,14 @@ func (p *kAuthServiceClient) Register(ctx context.Context, req *auth.RegisterReq
 func (p *kAuthServiceClient) GetUserId(ctx context.Context, req *auth.GetUserIdReq, callOptions ...callopt.Option) (r *auth.GetUserIdResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetUserId(ctx, req)
+}
+
+func (p *kAuthServiceClient) GetClientToken(ctx context.Context, req *auth.GetClientTokenReq, callOptions ...callopt.Option) (r *auth.GetClientTokenResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetClientToken(ctx, req)
+}
+
+func (p *kAuthServiceClient) GetClientId(ctx context.Context, req *auth.GetClientIdReq, callOptions ...callopt.Option) (r *auth.GetClientIdResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetClientId(ctx, req)
 }

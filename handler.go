@@ -44,3 +44,15 @@ func (s *AuthServiceImpl) GetUserId(ctx context.Context, req *auth.GetUserIdReq)
 	resp, err = App.AuthService.GetUserId(ctx, req)
 	return
 }
+
+// GetClientToken implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) GetClientToken(ctx context.Context, req *auth.GetClientTokenReq) (resp *auth.GetClientTokenResp, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// GetClientId implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) GetClientId(ctx context.Context, req *auth.GetClientIdReq) (resp *auth.GetClientIdResp, err error) {
+	// TODO: Your code here...
+	return
+}

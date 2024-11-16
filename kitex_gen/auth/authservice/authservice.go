@@ -24,6 +24,8 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"GenerateActiveCode": kitex.NewMethodInfo(generateActiveCodeHandler, newAuthServiceGenerateActiveCodeArgs, newAuthServiceGenerateActiveCodeResult, false),
 		"Register":           kitex.NewMethodInfo(registerHandler, newAuthServiceRegisterArgs, newAuthServiceRegisterResult, false),
 		"GetUserId":          kitex.NewMethodInfo(getUserIdHandler, newAuthServiceGetUserIdArgs, newAuthServiceGetUserIdResult, false),
+		"GetClientToken":     kitex.NewMethodInfo(getClientTokenHandler, newAuthServiceGetClientTokenArgs, newAuthServiceGetClientTokenResult, false),
+		"GetClientId":        kitex.NewMethodInfo(getClientIdHandler, newAuthServiceGetClientIdArgs, newAuthServiceGetClientIdResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName":     "auth",
@@ -130,6 +132,42 @@ func newAuthServiceGetUserIdResult() interface{} {
 	return auth.NewAuthServiceGetUserIdResult()
 }
 
+func getClientTokenHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceGetClientTokenArgs)
+	realResult := result.(*auth.AuthServiceGetClientTokenResult)
+	success, err := handler.(auth.AuthService).GetClientToken(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceGetClientTokenArgs() interface{} {
+	return auth.NewAuthServiceGetClientTokenArgs()
+}
+
+func newAuthServiceGetClientTokenResult() interface{} {
+	return auth.NewAuthServiceGetClientTokenResult()
+}
+
+func getClientIdHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceGetClientIdArgs)
+	realResult := result.(*auth.AuthServiceGetClientIdResult)
+	success, err := handler.(auth.AuthService).GetClientId(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceGetClientIdArgs() interface{} {
+	return auth.NewAuthServiceGetClientIdArgs()
+}
+
+func newAuthServiceGetClientIdResult() interface{} {
+	return auth.NewAuthServiceGetClientIdResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -185,6 +223,26 @@ func (p *kClient) GetUserId(ctx context.Context, req *auth.GetUserIdReq) (r *aut
 	_args.Req = req
 	var _result auth.AuthServiceGetUserIdResult
 	if err = p.c.Call(ctx, "GetUserId", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetClientToken(ctx context.Context, req *auth.GetClientTokenReq) (r *auth.GetClientTokenResp, err error) {
+	var _args auth.AuthServiceGetClientTokenArgs
+	_args.Req = req
+	var _result auth.AuthServiceGetClientTokenResult
+	if err = p.c.Call(ctx, "GetClientToken", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetClientId(ctx context.Context, req *auth.GetClientIdReq) (r *auth.GetClientIdResp, err error) {
+	var _args auth.AuthServiceGetClientIdArgs
+	_args.Req = req
+	var _result auth.AuthServiceGetClientIdResult
+	if err = p.c.Call(ctx, "GetClientId", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
