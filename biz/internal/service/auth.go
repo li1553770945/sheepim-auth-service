@@ -170,7 +170,7 @@ func (s *AuthServiceImpl) GetClientId(ctx context.Context, req *auth.GetClientId
 		return resp, nil
 	}
 	resp.ClientId = &clientId
-	klog.CtxInfof(ctx, "令牌解析成功，客户端ID: %d", resp.ClientId)
+	klog.CtxInfof(ctx, "令牌解析成功，客户端ID: %s", *resp.ClientId)
 	return resp, nil
 }
 
