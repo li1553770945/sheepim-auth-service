@@ -6,6 +6,8 @@ cp script/* output/
 cp conf/* output/conf/
 chmod +x output/bootstrap.sh
 
+go mod tidy
+
 if [ "$IS_SYSTEM_TEST_ENV" != "1" ]; then
     go build -o output/bin/${RUN_NAME}
 else
