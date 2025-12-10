@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
+	"github.com/kitex-contrib/registry-etcd/retry"
 	configInfra "github.com/li1553770945/sheepim-auth-service/biz/infra/config"
 	"github.com/li1553770945/sheepim-auth-service/biz/infra/container"
 	"github.com/li1553770945/sheepim-auth-service/biz/infra/log"
@@ -15,6 +17,15 @@ import (
 	"github.com/li1553770945/sheepim-auth-service/kitex_gen/auth/authservice"
 	"net"
 	"os"
+	"time"
+)
+
+const (
+	MaxRetryTimes  = 3
+	ObserveDelay   = 20 * time.Second
+	RetryDelay     = 5 * time.Second
+	MaxConnections = 500
+	MaxQps         = 100
 )
 
 func main() {
@@ -31,6 +42,8 @@ func main() {
 	App := container.GetGlobalContainer()
 
 	defer func(p provider.OtelProvider, ctx context.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second) // 5 秒超时
+		defer cancel()
 		err := p.Shutdown(ctx)
 		if err != nil {
 			klog.Fatalf("server stopped with error:", err)
@@ -41,8 +54,13 @@ func main() {
 	if err != nil {
 		panic("设置监听地址出错")
 	}
+	retryConfig := retry.NewRetryConfig(
 
-	r, err := etcd.NewEtcdRegistry(App.Config.EtcdConfig.Endpoint) // r should not be reused.
+		retry.WithMaxAttemptTimes(MaxRetryTimes),
+		retry.WithObserveDelay(ObserveDelay),
+		retry.WithRetryDelay(RetryDelay),
+	)
+	r, err := etcd.NewEtcdRegistryWithRetry(App.Config.EtcdConfig.Endpoint, retryConfig) // r should not be reused.
 	if err != nil {
 		klog.Fatal(err)
 	}
@@ -53,8 +71,12 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
 		server.WithRegistry(r),
 		server.WithServiceAddr(addr),
+		server.WithLimit(&limit.Option{
+			MaxConnections: MaxConnections, // 防止瞬时流量拖垮服务
+			MaxQPS:         MaxQps,         // 防止单个服务过载
+		}),
 	)
 	if err := svr.Run(); err != nil {
-		klog.Fatalf("server stopped with error:", err)
+		klog.Fatalf("服务启动失败:%v", err)
 	}
 }
